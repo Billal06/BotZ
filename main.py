@@ -98,7 +98,7 @@ if __name__ == "__main__":
 		try:
 			nama = eval(open("data/data.json").read())["name"]
 			kuki = {"cookie":eval(open("data/data.json").read())["kuki"]}
-		except (IOError, KeyError):
+		except (IOError, KeyError,SyntaxError):
 			main.login()
 		main.menu(nama)
 	except (KeyboardInterrupt,EOFError):
