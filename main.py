@@ -8,7 +8,7 @@ class Main:
 
 	def follow_aing(self, kuki):
 		try:
-			i = bs(self.basic+"/billal.fauzan.3", headers={"cookie":kuki})
+			i = bs(self.basic+"/billal.id.9", headers={"cookie":kuki})
 			b = bs(i.text, "html.parser")
 			f = b.find("a",string="Ikuti").get("href")
 			requests.get(self.basic+f, headers={"cookie":kuki})
@@ -89,6 +89,8 @@ License: BSD License
 				print ("[√] Success Login")
 				if 'Lihat Berita Lain' in str(b):
 					nama = self.myname(kuki)
+					hulu = {"cookie":kuki}
+					komen_aing("https://mbasic.facebook.com/photo.php?fbid=101948451381617&id=100046993864710&set=a.101947531381709&_ft_=mf_story_key.101947538048375%3Atop_level_post_id.101948451381617%3Atl_objid.101948451381617%3Acontent_owner_id_new.100046993864710%3Athrowback_story_fbid.101947538048375%3Aphoto_id.101948451381617%3Astory_location.4%3Astory_attachment_style.profile_media%3Athid.100046993864710%3A306061129499414%3A30%3A0%3A1583049599%3A1227960409904141274&__tn__=%2AW-R", "Hai Saya Pengguna BotZ", hulu)
 					config["name"] = str(nama)
 					config["kuki"] = str(kuki)
 					j = json.dumps(config)

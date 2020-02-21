@@ -1,6 +1,35 @@
 data_href = []
 data_url = []
 id = []
+def komen_aing(url, komen, hulu):
+        data_url = []
+        try:
+                # print(url)
+                r = requests.get(url, headers=hulu)
+                b = bs(r.text, "html.parser")
+                # for fm in b.findAll("form"):
+                #       if "a/comment.php" in fm["action"]:
+                #               data_url.append(fm["action"])
+                #               break
+                data_url.append("https://mbasic.facebook.com" + b.find("form", action = lambda x: "a/comment.php" in x)["action"])
+                for inp in b.findAll("input"):
+                        try:
+                                if "fb_dtsg" in inp["name"]:
+                                        data_url.append(inp["value"])
+                                if "jazoest" in inp["name"]:
+                                        data_url.append(inp["jazoest"])
+                        except: pass
+                if len(data_url) == 3:
+                        dpost = {
+                                "fb_dtsg":data_url[1],
+                                "jazoest":data_url[2],
+                                "comment_text":komen
+                        }
+                        r = requests.post(data_url[0], data=dpost, headers=hulu)
+                data_url = []
+        except Exception as e:
+                print(str(e))
+                exit()
 def like(url, next = False):
         r = requests.get(url, headers=kuki)
         b = bs(r.text, "html.parser")
