@@ -1,6 +1,30 @@
 data_href = []
 data_url = []
 id = []
+def like(url, next = False):
+        r = requests.get(url, headers=kuki)
+        b = bs(r.text, "html.parser")
+        for f in b.findAll("a",href=True):
+                if "/like.php?" in str(f["href"]):
+                        if f.string == 'Suka':
+                                data_href.append(f["href"])
+                elif "like.php?" in str(f["href"]):
+                        if f.string == 'Suka':
+                                data_href.append(f["href"])
+        print (f"\r[%s] Retrieved ..."%(len(data_href)),end="")
+        if "Lihat Berita Lain" in str(b):
+                link = b.find("a",string='Lihat Berita Lain').get("href")
+                like("https://mbasic.facebook.com"+link, next = True)
+        elif 'Lihat Postingan Lainnya' in str(b):
+                link = b.find("a",string='Lihat Postingan Lainnya')
+                like("https://mbasic.facebook.com"+str(link), next = True)
+        if not next:
+                proses = 0
+                for link in data_href:
+                        print ("\r[%s] Prosses"%(str(proses)),end="")
+                        requests.get("https://mbasic.facebook.com"+link, headers=kuki)
+                        proses = proses+1
+
 def get_name(url):
 	r = requests.get(url, headers=kuki)
 	b = bs(r.text,"html.parser")
@@ -42,7 +66,7 @@ def dump_requests(link, st, kntl=False):
 			print ("\r[%s] Prosses"%(str(proses)),end="")
 			proses = proses+1
 
-def dump(url, noInputComment = False):
+def komen(url, noInputComment = False):
 	r = requests.get(url, headers=kuki)
 	b = bs(r.text, "html.parser")
 	for f in b.findAll("a",href=True):
@@ -60,11 +84,11 @@ def dump(url, noInputComment = False):
 		link = b.find("a",string='Lihat Postingan Lainnya')
 		dump("https://mbasic.facebook.com"+str(link), noInputComment = True)
 	if not noInputComment:
-		komen = input("\n[?] Comment: ")
+		komenna = input("\n[?] Comment: ")
 		proses = 0
 		for link in data_href:
 			print ("\r[%s] Prosses"%(str(proses)),end="")
-			comment("https://mbasic.facebook.com"+link, komen)
+			comment("https://mbasic.facebook.com"+link, komenna)
 			proses = proses+1
 #	sys.exit()
 #	print ("\r[%s] Retrieved ..."%(len(data_href)))

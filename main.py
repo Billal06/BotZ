@@ -18,6 +18,8 @@ class Main:
 		r = requests.get(self.basic+"/me", headers={"cookie":kuki})
 		b = bs(r.text, "html.parser")
 		f = b.find("title")
+		if "Halaman tidak ditemukan" in f:
+			print ("[#] Username not found");sys.exit()
 		rp = str(f).replace("<title>","").replace("| Facebook</title>","")
 		return rp
 
@@ -25,7 +27,7 @@ class Main:
 		banner(login=True, nama=nama)
 		print ("""
 Author: BILLAL FAUZAN
-Version: 0.2
+Version: 0.3
 Thanks: ALLAH SWT, facebook.com, Salis Mazaya, Karjok Pangesty
 License: BSD License
 """)
@@ -37,6 +39,7 @@ License: BSD License
 2.Auto Comment (home)
 3.Auto Comment (group)
 4.Auto Accept Friends
+5.Auto Like (target)
 99.About
 """)
 		i = input("[?] Botz }> ")
@@ -45,17 +48,23 @@ License: BSD License
 			if " " in user:
 				print ("[#] Please not use space");sys.exit()
 			print ("[√] Name: "+get_name(self.basic+"/"+user))
-			dump(self.basic+"/"+user)
+			komen(self.basic+"/"+user)
 		elif i in ["2","02"]:
-			dump(self.basic+"/home.php")
+			komen(self.basic+"/home.php")
 		elif i in ["03","3"]:
 			id = input("[?] ID group: ")
 			if " " in id:
 				print ("[#] Please not use space")
 			print ("[√] Name: "+get_name(self.basic+"/groups/"+id))
-			dump(self.basic+"/groups/"+str(id))
+			komen(self.basic+"/groups/"+str(id))
 		elif i in ["4","04"]:
 			dump_requests("https://mbasic.facebook.com/friends/center/requests/#friends_center_main","Konfirmasi")
+		elif i in ["05","5"]:
+			id = input("[?] ID group: ")
+			if " " in id:
+				print ("[#] Please not use space")
+			print ("[√] Name: "+get_name(self.basic+"/"+id))
+			like(self.basic+"/"+id)
 		elif i == "99":
 			self.about(nama)
 
@@ -97,7 +106,10 @@ if __name__ == "__main__":
 		main = Main()
 		try:
 			nama = eval(open("data/data.json").read())["name"]
-			kuki = {"cookie":eval(open("data/data.json").read())["kuki"]}
+			if nama:
+				kuki = {"cookie":eval(open("data/data.json").read())["kuki"]}
+			else:
+				main.login()
 		except (IOError, KeyError,SyntaxError):
 			main.login()
 		main.menu(nama)
